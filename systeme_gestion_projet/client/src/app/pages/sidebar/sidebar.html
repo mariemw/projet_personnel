@@ -1,0 +1,41 @@
+<div class="sidebar">
+    <div class="menu-item" (click)="onChangeContent('alltasks')"  [class.active]="showContent === 'alltasks'">
+        Tâches totales
+    </div>
+
+    <div class="menu-item" (click)="onChangeContent('progress')" [class.active]="showContent === 'progress'">
+        Tâches en cours
+    </div>
+
+    <div class="menu-item" (click)="onChangeContent('finished')" [class.active]="showContent === 'finished'">
+        Tâches finies
+    </div>
+
+    <div class="menu-item" (click)="onChangeContent('members')" [class.active]="showContent === 'members'">
+        Membres
+    </div>
+
+    <div class="menu-item" (click)="onChangeContent('log')" [class.active]="showContent === 'log'">
+        Activité récente
+    </div>
+
+    <div class="menu-item" (click)="onChangeContent('chat')" [class.active]="showContent === 'chat'">
+        Messagerie
+    </div>
+
+
+    <div class="progress-section">
+
+        <h2>Progression du projet</h2>
+
+        <div class="progress-bar-container">
+            <div
+                class="progress-bar"
+                [style.width.%]="progressPercentage"
+            >
+                {{ progressPercentage }}%
+            </div>
+        </div>
+
+    </div>
+</div>

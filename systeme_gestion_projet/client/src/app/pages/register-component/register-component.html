@@ -1,0 +1,22 @@
+<div class="page">
+    <form method="post" (ngSubmit)="saveEmail()">
+        <h1 class="title">Inscription</h1>
+        <p class="subtitle">Inscrivez-vous pour continuer</p>
+        <div class="container">
+            <label for="uname"><b>E-mail</b></label>
+            <input type="email" [(ngModel)]="email" placeholder="Saisissez votre adresse e-mail" name="uname" required>
+            <button type="submit" >S'inscrire</button>
+        </div>
+    </form>
+
+</div>
+
+@if(showInfoPopup){
+    <div class="overlay">
+        <app-info-popup
+            [message]="popupMessage"
+            [type]="popupType"
+            (close)="showInfoPopup = false">
+        </app-info-popup>
+    </div>
+}

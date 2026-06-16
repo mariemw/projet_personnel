@@ -1,0 +1,73 @@
+<div class="tasks">
+    @if(all){
+        <div class="add-new-task" (click)="onShow()">
+            <span class="plus">+</span>
+            <p>Nouvelle tache</p>
+        </div>
+    }
+    
+@for(task of tasks;track task.id){
+    <div class="task-card" [class.expired]="isExpired(task)">
+        <div class="task-top">
+                <h3>{{task.title}}</h3>
+                
+                <select
+                class="status"
+                [class.not-started]="task.status === status.NOT_STARTED"
+                [class.progress]="task.status === status.IN_PROGRESS"
+                [class.finished]="task.status === status.FINISHED"
+                [(ngModel)]="task.status"
+                (ngModelChange)="onChangeStatus(task,$event)"
+            >
+
+                <option [value]="status.NOT_STARTED">
+                    Non commencé
+                </option>
+
+                <option [value]="status.IN_PROGRESS">
+                    En cours
+                </option>
+
+                <option [value]="status.FINISHED">
+                    Terminé
+                </option>
+
+            </select>
+        </div> 
+            <div class="task-body">
+            <p class="task-description">{{ task.description }}</p>
+            @if(task.deadline){
+                <div
+                class="deadline-badge"
+                [class.expired]="isExpired(task)"
+                >
+                <mat-icon>schedule</mat-icon>
+
+                {{ formatDate(task.deadline) }}
+                </div>
+            }
+            
+        </div>
+        <div class="task-footer"> 
+            <button class="remove" (click)="onDeleteTask(task)">Supprimer</button>
+            <mat-icon
+                class="calendar-icon"
+                (click)="showDates(task.id!)"
+            >
+                event
+            </mat-icon>
+            <mat-icon class="edit-icon" (click)="onShowEditPopUp(task)">edit</mat-icon>
+        </div>
+    </div>
+    @if(activeTaskId === task.id){
+    <div class="overlay">
+        <div class="popup">
+        <input type="date" [(ngModel)]="deadline">
+        <button class="create-btn" (click)="addDeadline(task.id!)">Ajouter</button>
+        </div>
+    </div>
+
+    }
+}
+
+</div>

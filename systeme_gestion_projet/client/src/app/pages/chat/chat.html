@@ -1,0 +1,19 @@
+<div class="chat-container">
+    <div class="chat-header">
+        <h4>ChatBox</h4>
+    </div>
+    <div class="chat-messages">
+        @for(msg of messages; track $index){
+            <div [class.me]="msg.userId === userId" class="message">
+                <strong>{{msg.userName}}</strong>
+                <p>{{msg.text}}</p>
+            </div>
+        }
+        
+    </div>
+
+    <div class="chat-input">
+        <input type="text" placeholder="Écrire un message..." [(ngModel)]="typing" />
+        <button (click)="sendMessage()">Envoyer</button>
+  </div>
+</div>

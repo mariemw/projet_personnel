@@ -1,0 +1,14 @@
+<div class="overlay">
+    <div class="popup">
+        <h2>{{ title }}</h2>
+        @for(field of fields; track $index){
+            <label>{{field.label}}</label>
+            <input type="text" [placeholder]="field.placeHolder" [(ngModel)]="field.input">
+        }
+        <div class="popup-buttons">
+            <button class="create-btn" (click)="onAction()">{{ actionLabel }}</button>
+            <button class="close-btn" (click)="onClose()">Fermer</button>
+        </div>
+    </div>
+</div>
+

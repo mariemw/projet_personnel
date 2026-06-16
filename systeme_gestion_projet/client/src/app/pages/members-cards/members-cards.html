@@ -1,0 +1,26 @@
+@for (member of members; track member.userName){
+
+  <div class="member-card">
+
+    <div class="member-left">
+      <div class="member-avatar">
+        {{ member.userName.charAt(0).toUpperCase() }}
+      </div>
+
+      <div class="member-info">
+        <h3>{{ member.userName }}</h3>
+        <p>Membre du projet</p>
+      </div>
+    </div>
+
+    @if(creator===userId){
+      <button class="delete-btn"
+          (click)="onDeleteMember(projectId, member.userName)">
+          <mat-icon>delete</mat-icon>
+      </button>
+    }
+    
+
+  </div>
+
+}

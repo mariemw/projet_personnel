@@ -1,0 +1,269 @@
+.projects{
+    /* Active le système CSS Grid → permet d’organiser les cartes en colonnes/lignes. */
+    display: grid; 
+    /* Crée des colonnes automatiquement :
+    auto-fill → remplit la ligne avec autant de colonnes que possible
+    minmax(280px, 320px) → chaque carte fait entre 280px et 320px */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 320px)); 
+    /* Centre toute la grille horizontalement */
+    justify-content: center;
+    /* Espace entre les cartes */
+    gap: 25px;
+    /* Espace à l’intérieur du conteneur (autour des cartes) */
+    padding: 30px;
+}
+
+.add-new-project {
+    /* Hauteur minimale → garde une taille uniforme */
+  min-height: 220px;
+  /* Coins arrondis (design moderne) */
+  border-radius: 20px;
+  /* Curseur devient une main → indique que c’est cliquable */
+  cursor: pointer;
+  /* Animation fluide pour hover */
+  transition: all 0.25s ease;
+  /* Dégradé bleu clair */
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  /* Bordure pointillée → style “ajouter” */
+  border: 2px dashed #5b7cfa;
+  /* Utilise flexbox en colonne */
+  display: flex;
+  flex-direction: column;
+  /* Centre le contenu verticalement + horizontalement */
+  justify-content: center;
+  align-items: center;
+  /* Couleur du texte */
+  color: #3451b2;
+  /* Ombre légère → effet de carte */
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+}
+
+.add-new-project .plus {
+    /* Taille du "+" */
+  font-size: 58px;
+  /* Gras */
+  font-weight: 700;
+  /* Supprime les espaces verticaux inutiles */
+  line-height: 1;
+  /* Espace sous le + */
+  margin-bottom: 10px;
+}
+
+.add-new-project p {
+    /* Enlève les marges par défaut */
+  margin: 0;
+  /* Taille du texte */
+  font-size: 16px;
+  /* Semi-gras */
+  font-weight: 600;
+}
+
+.add-new-project:hover {
+    /* Monte légèrement → effet "lift" */
+  transform: translateY(-6px);
+  /* Ombre plus forte → profondeur */
+  box-shadow: 0 14px 28px rgba(52, 81, 178, 0.18);
+  /* Couleur un peu différente au hover */
+  background: linear-gradient(135deg, #cfe0ff, #adc8ff);
+}
+
+.project-card {
+    /* Hauteur minimale */
+  min-height: 220px;
+  /* Fond  */
+  background:linear-gradient(135deg, #dbeafe, #bfdbfe);
+  /* Coins arrondis */
+  border-radius: 20px;
+  /* Espace intérieur */
+  padding: 22px;
+  /* Organisation verticale */
+  display: flex;
+  flex-direction: column;
+  /* Espace entre header / body / footer */
+  justify-content: space-between;
+  /* Carte cliquable */
+  cursor: pointer;
+  /* Animation pour hover */
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  /* Ombre */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  /* Bordure légère */
+  border: 1px solid #eef2f7;
+  /* Permet de positionner le ::before */
+  position: relative;
+  /* Coupe ce qui dépasse (important pour effet design) */
+  overflow: hidden;
+}
+.project-card::before {
+    /* Crée un pseudo-élément */
+  content: "";
+  /* Positionné en haut de la carte */
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* Une barre fine */
+  width: 100%;
+  height: 6px;
+  /* Dégradé horizontal */
+  background: linear-gradient(90deg, #567ebd, #7c9df0);
+}
+
+.project-card:hover {
+    /* Monte légèrement */
+  transform: translateY(-6px);
+  /* Ombre plus forte */
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.14);
+}
+
+.card-header b {
+    /* Espace autour du titre */
+  margin: 10px 0 0 0;
+  /* Taille */
+  font-size: 22px;
+  /* Gras */
+  font-weight: 700;
+  /* Couleur foncée */
+  color: #1f2d3d;
+}
+
+.card-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.edit-icon{
+  font-size: 22px;
+  cursor: pointer;
+  color: #4568b2;
+  transition: transform 0.2s ease;
+}
+
+.member-icon{
+  font-size: 22px;
+  cursor: pointer;
+  color: #4568b2;
+  transition: transform 0.2s ease;
+}
+
+.edit-icon:hover{
+  transform: scale(1.1);
+}
+
+.member-icon:hover{
+  transform: scale(1.1);
+}
+
+.card-body {
+    /* Espace autour */
+  margin: 18px 0;
+  /* Prend tout l’espace disponible */
+  flex: 1;
+}
+.description {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #5b6472;
+    /* Active un mode spécial pour limiter le texte */
+  display: -webkit-box; 
+  /* Direction verticale */
+  -webkit-box-orient: vertical;
+  /* Coupe le reste du texte */
+  overflow: hidden;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  /* Ligne de séparation */
+  border-top: 1px solid #edf1f5;
+  /*une a gauche l'Atre a droite*/
+  justify-content: space-between;
+  /* Espace au-dessus */
+  padding-top: 14px;
+}
+.creator {
+  color: #4568b2;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 999px;
+}
+
+.remove, .update{
+  background: #eef4ff;
+  color: #4568b2;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 999px;
+
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+
+  z-index: 9999;
+}
+
+.project-card p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #555;
+  word-break: break-word;
+}
+
+.project-card h3 {
+  margin: 0 0 12px 0;
+  font-size: 22px;
+  color: #1f2d3d;
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.logout-container{
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px 30px 0;
+}
+
+.logout-btn{
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 8px 20px rgba(220, 38, 38, 0.25);
+}
+
+.logout-btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(220, 38, 38, 0.35);
+}
+
+.logout-btn:active{
+  transform: translateY(0);
+}

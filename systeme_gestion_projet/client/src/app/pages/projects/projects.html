@@ -1,0 +1,71 @@
+<div class="logout-container">
+    <button class="logout-btn" (click)="validation=true">
+        Déconnexion
+    </button>
+</div>
+@if(validation){
+    <div class="overlay">
+        <app-validation-popup (confirm)="deconnect()" (cancel)="validation=false" [text]="'Êtes-vous sûr de vouloir déconnecter?'"></app-validation-popup>
+    </div>
+    
+}
+<div class="projects">
+    <div class="add-new-project" (click)="show()">
+        <span class="plus">+</span>
+        <p>Nouveau projet</p>
+    </div>
+    @for (project of projects; track project._id){
+        
+        <div class="project-card">
+            <div class="card-header">
+                <b>{{ project.title }}</b>
+                <div class="header-actions">
+                    @if(userId===project.creator){
+                        <mat-icon class="edit-icon"
+                        (click)="openEditPopup(project)">
+                            edit
+                        </mat-icon>
+                    }
+                </div>
+            </div>
+            <div class="card-body" (click)="project._id && goToProject(project._id)">
+                <p class="description">{{ project.description }}</p>
+            </div>
+            <div class="card-footer">
+                @if(userId===project.creator){
+                    <button class="remove" (click)="projectToDelete = project._id">Supprimer</button>
+                }
+                
+                <span class="creator">{{ creatorNames[project.creator] }}</span>
+            </div>
+        </div>
+    }
+    @if(projectToEdit){
+        <app-pop-up [fields]="projectFields" [title]="'Modifier projet'" [actionLabel]="'Modifier'" 
+        (action)="edit($event)" (close)="projectToEdit=undefined" ></app-pop-up>
+    }
+    @if(projectToDelete){
+        <div class="overlay">
+            <app-validation-popup
+            (confirm)="removeProject(projectToDelete)"
+            (cancel)="projectToDelete = undefined"
+            [text]="'Êtes-vous sûr de vouloir supprimer le projet ?'">
+            </app-validation-popup>
+        </div>
+    }
+</div>
+
+ 
+@if(showPopup){
+     <app-pop-up [fields]="projectFields" [title]="'Ajouter projet'" [actionLabel]="'Ajouter'" 
+    (action)="add($event)" (close)="showPopup=false" ></app-pop-up>
+}
+@if(showInfoPopup){
+    <div class="overlay">
+        <app-info-popup
+            [message]="popupMessage"
+            [type]="popupType"
+            (close)="showInfoPopup = false">
+        </app-info-popup>
+    </div>
+}

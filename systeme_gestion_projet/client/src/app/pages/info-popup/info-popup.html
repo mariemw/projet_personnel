@@ -1,0 +1,15 @@
+<div class="popup">
+    <div class="header">
+        <h3>
+            {{ type === 'success' ? 'Succès' : 'Erreur' }}
+        </h3>
+
+        <button (click)="close.emit()">✕</button>
+    </div>
+
+    <p>{{ message }}</p>
+
+    <button class="action-btn" (click)="close.emit()">
+        Fermer
+    </button>
+</div>

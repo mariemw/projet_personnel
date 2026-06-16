@@ -1,0 +1,118 @@
+<div class="page-container">
+
+        <app-sidebar [showContent]="showContent" [progressPercentage]="progressPercentage" 
+        (changeContent)="showContent=$event" [projectId]="projectId"></app-sidebar>
+
+    <div class="content">
+
+       
+           <div class="return-container">
+            <button class="return-btn" (click)="return()">
+                <mat-icon>arrow_back</mat-icon>
+                Retour
+            </button>
+            </div>
+      
+
+    
+
+    @if (showContent==='alltasks'){
+
+            <app-task-cards [tasks]="tasks" [projectId]="projectId" [status]="status"
+                            (changeStatus)="changeStatus($event.task, $event.value)" (deleteTask)="deleteTask($event.projectId,$event.task)"
+                            (showEditPopUp)="showmod($event)" (show)="show()" [all]="true"
+            ></app-task-cards>
+       
+    }
+
+    @if(showContent==='chat'){
+        <app-chat [projectId]="projectId" [userId]="userId" [userName]="memberName"></app-chat>
+    }
+
+    @if(showContent==='progress'){
+         <app-task-cards [tasks]="progressTasks" [projectId]="projectId" [status]="status"
+                        (changeStatus)="changeStatus($event.task, $event.value)" (deleteTask)="deleteTask($event.projectId,$event.task)"
+                        (showEditPopUp)="showmod($event)" [all]="false"
+        ></app-task-cards>
+    }
+
+    @if(showContent==='finished'){
+        <app-task-cards [tasks]="finishedTasks" [projectId]="projectId" [status]="status"
+                        (changeStatus)="changeStatus($event.task, $event.value)" (deleteTask)="deleteTask($event.projectId,$event.task)"
+                        (showEditPopUp)="showmod($event)" [all]="false"
+        ></app-task-cards>
+    }
+
+    @if(showContent==='members'){
+
+        <div class="members-container">
+
+            <div class="members-header">
+                @if(userId===creator){
+                    <button class="add-member-fab" (click)="showMembers()">
+                        <mat-icon>person_add</mat-icon>
+                    </button>
+                }
+            </div>
+            <app-members-cards [members]="members" [projectId]="projectId" (deleteMember)="deleteMember($event.projectId,$event.userName)"
+                    [userId]="userId" [creator]="creator"></app-members-cards>
+
+        </div>
+
+    }
+
+        @if(showmember){
+            <app-pop-up [fields]="memberFields" [title]="'Ajouter membre'" [actionLabel]="'Ajouter'" 
+            (action)="addUser($event)" (close)="showmember=false" ></app-pop-up>
+        }
+    
+    @if(showContent==='log'){
+
+    <div class="logs-container">
+
+        @for(log of logger; track $index){
+
+            <div class="log-card">
+
+                <div class="log-icon">
+                    <mat-icon>history</mat-icon>
+                </div>
+
+                <div class="log-content">
+                    {{ log }}
+                </div>
+
+            </div>
+
+        }
+
+    </div>
+
+}
+
+    @if(showpopupModifiy && selectedTask){
+         <app-pop-up [fields]="taskFields" [title]="'Modifier tâche'" [actionLabel]="'Modifier'" 
+            (action)="editTask($event)" (close)="showpopupModifiy=false" ></app-pop-up>
+    
+    }
+        </div>
+
+    </div>
+
+<div>
+@if(showPopup){
+    <app-pop-up [fields]="taskFields" [title]="'Nouvelle tâche'" [actionLabel]="'Créer'" 
+    (action)="createTask($event)" (close)="showPopup=false" ></app-pop-up>
+}
+
+</div>
+
+@if(showInfoPopup){
+    <div class="overlay">
+        <app-info-popup
+            [message]="popupMessage"
+            [type]="popupType"
+            (close)="showInfoPopup = false">
+        </app-info-popup>
+    </div>
+}
