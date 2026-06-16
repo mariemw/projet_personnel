@@ -10,7 +10,7 @@ import { Message } from '../message.interface';
 export class SocketService {
   private socket:Socket;
   constructor(){
-    this.socket=io(environment.apiUrl);
+    this.socket=io(environment.wsUrl);
     this.socket.on('connect', () => {
     });
 
