@@ -10,14 +10,18 @@ import { Message } from '../message.interface';
 export class SocketService {
   private socket:Socket;
   constructor(){
-    this.socket=io(environment.wsUrl);
+    this.socket=io(environment.wsUrl,{
+      transports: ['websocket', 'polling']
+    });
     this.socket.on('connect', () => {
+      console.log('CONNECTED', this.socket.id);
     });
 
     this.socket.on('disconnect', () => {
     });
 
-    this.socket.on('connect_error', () => {
+    this.socket.on('connect_error', (err) => {
+      console.error('SOCKET ERROR', err);
     });
   }
 
