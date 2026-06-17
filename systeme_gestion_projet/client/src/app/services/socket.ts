@@ -11,7 +11,7 @@ export class SocketService {
   private socket:Socket;
   constructor(){
     this.socket=io(environment.wsUrl,{
-      transports: ['polling']
+      transports: ['websocket', 'polling']
     });
     this.socket.on('connect', () => {
       console.log('CONNECTED', this.socket.id);
