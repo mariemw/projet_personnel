@@ -10,8 +10,10 @@ import { Message } from '../message.interface';
 export class SocketService {
   private socket:Socket;
   constructor(){
-    this.socket=io(environment.wsUrl,{
-      transports: ['polling']
+    this.socket = io(environment.wsUrl, {
+      transports: ['polling', 'websocket'],
+      secure: false,
+      forceNew: true
     });
     this.socket.on('connect', () => {
       console.log('CONNECTED', this.socket.id);
