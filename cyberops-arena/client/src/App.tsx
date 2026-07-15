@@ -6,6 +6,7 @@ import image from "./assets/image.png";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import WaitGameComponent from './components/wait-game.component';
 import GameComponent from './components/game.component';
+import GameStartedComponent from './components/game-started.component';
  
 function App() {
   useEffect(() => {
@@ -34,6 +35,7 @@ function App() {
             <Route path='/' element={ <JoinGameComponent/>}></Route>
             <Route path='/wait' element={ <WaitGameComponent/>}></Route>
             <Route path='/game/:gameId' element={ <GameComponent/>}></Route>
+            <Route path='/game-started/:gameId' element={<GameStartedComponent/>}></Route>
           </Routes>
          
       </div>

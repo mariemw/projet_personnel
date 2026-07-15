@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { GameGateway } from './gateways/game/game.gateway';
 import { GameModule } from './modules/game/game.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports: [GameModule],
+  imports: [GameModule,
+    ScheduleModule.forRoot()
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

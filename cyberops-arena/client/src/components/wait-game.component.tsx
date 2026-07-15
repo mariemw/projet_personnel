@@ -1,12 +1,15 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { socket } from "../services/socket";
 import { useNavigate } from "react-router-dom";
+import { GameContext } from "../hooks/game-context";
+import "./wait-game.component.css"
 
 export default function WaitGameComponent(){
     const navigate = useNavigate();
+    const { setGame } = useContext(GameContext);
      useEffect(()=>{
             socket.on("gameLocked",(game)=>{
-                console.log("wfeqw");
+                setGame(game);
                 navigate(`/game/${game.gameId}`);
             })
             
@@ -15,9 +18,18 @@ export default function WaitGameComponent(){
             }
         },[navigate])
     return(
-        <>
-        <h1>En attente d'un joueur...</h1>
-        </>
+        <div className="wait-page">
+            <div className="wait-card">
+                <h1>Connexion au centre des opérations</h1>
+
+                
+
+                <p className="status">
+                    Recherche d'un agent disponible...
+                </p>
+                <div className="loader"></div>
+            </div>
+        </div>
     )
    
 }

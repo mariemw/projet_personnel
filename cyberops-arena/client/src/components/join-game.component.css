@@ -90,3 +90,17 @@
     opacity: .4;
     cursor: not-allowed;
 }
+
+.join-page {
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    width:100%;
+
+}

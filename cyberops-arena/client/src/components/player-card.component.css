@@ -1,0 +1,70 @@
+.player-card {
+
+    width: 220px;
+
+    padding: 25px;
+
+    border-radius: 18px;
+
+    background: rgba(20,25,40,.8);
+
+    border: 1px solid rgba(69,215,255,.3);
+
+    color:white;
+
+    text-align:center;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,.4);
+
+}
+
+
+.avatar {
+
+    width:70px;
+
+    height:70px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:35px;
+
+    background:#172033;
+
+}
+
+
+.player-card h3 {
+
+    color:#45d7ff;
+
+    margin:15px 0 5px;
+
+}
+
+
+.player-card span {
+
+    display:inline-block;
+
+    margin-top:10px;
+
+    padding:5px 12px;
+
+    border-radius:20px;
+
+    background:#0f8;
+
+    color:black;
+
+    font-size:12px;
+
+}

@@ -1,0 +1,57 @@
+.wait-page{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+.wait-card{
+    width:500px;
+
+    padding:40px;
+
+    border-radius:20px;
+
+    background:rgba(15,20,30,.82);
+
+    backdrop-filter:blur(12px);
+
+    border:1px solid rgba(0,255,255,.2);
+
+    text-align:center;
+
+    color:white;
+
+    box-shadow:0 0 40px rgba(0,255,255,.15);
+}
+
+.loader{
+    width:70px;
+    height:70px;
+
+    margin:30px auto;
+
+    border-radius:50%;
+
+    border:6px solid rgba(255,255,255,.15);
+
+    border-top:6px solid #00e5ff;
+
+    animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+.status{
+    color:#8fdfff;
+
+    font-size:18px;
+}
