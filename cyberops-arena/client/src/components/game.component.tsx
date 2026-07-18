@@ -12,9 +12,8 @@ export default function GameComponent(){
     const navigate=useNavigate();
     const players:player[]=game?.players??[];
     const handleStartGame=()=>{
-        socket.emit("startGame",game);
+        socket.emit("startGame",game.gameId);
     }
-    
     useEffect(()=>{
         socket.on("gameStarted",()=>{
             navigate(`/game-started/${game.gameId}`)

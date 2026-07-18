@@ -26,9 +26,7 @@ export default function JoinGameComponent(){
         }
     },[navigate])
     const handleClick=()=>{
-        console.log(playerId)
-        socket.emit("joinGame",{playerId,name})
-        console.log("hiii")
+        socket.emit("joinGame",{playerId,name})  
     }
     const [playerId] = useState(uuidv4());
     const [name, setName] = useState('');

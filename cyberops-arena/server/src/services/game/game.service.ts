@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { InfraType } from 'src/enums/infraType.enum';
 import { Role } from 'src/enums/role.enum';
 import { Game } from 'src/interfaces/game.interface';
 import { Player } from 'src/interfaces/player.interface';
@@ -19,7 +20,12 @@ export class GameService {
             }else{
                 player.role=Role.Defender;
             }
-            game.players.push(player)
+            game.players.push(player);
+            game.systemHealth = game.infrastructures.reduce(
+                (total, infra) => total + infra.health,
+                0
+            );
+            game.infrastructures=[{type:InfraType.DataBase,health:25},{type:InfraType.Energizer,health:25},{type:InfraType.FireWall,health:25},{type:InfraType.Server,health:25}];
             if(game.players.length===2) game.isLocked=true;
             return game;
         }
@@ -28,7 +34,9 @@ export class GameService {
     createGame(player:Player){
         const gameId = uuidv4();
         this.giveRandomRole(player);
-        const game={gameId,players:[player],isLocked:false};
+        const game={gameId,players:[player],isLocked:false,systemHealth:100,infrastructures:
+            [{type:InfraType.DataBase,health:25},{type:InfraType.Energizer,health:25},{type:InfraType.FireWall,health:25},{type:InfraType.Server,health:25}]
+        };
         this.games.push(game);
         return game;
     }
@@ -36,5 +44,11 @@ export class GameService {
     giveRandomRole(player:Player){
         const roles: Role[] = [Role.Hacker, Role.Defender];
         player.role=roles[Math.floor(Math.random()*roles.length)];
+    }
+
+    getGame(gameId:string){
+        const game=this.games.find((g)=>g.gameId===gameId);
+        if(!game) throw new Error("game not found");
+        return game;
     }
 }
