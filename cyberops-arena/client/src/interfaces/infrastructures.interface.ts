@@ -5,6 +5,7 @@ export interface Infrastructure{
     type: InfraType;
 
     health: number;
+    isBlocked?:boolean
 
     // status?: InfrastructureStatus;
 

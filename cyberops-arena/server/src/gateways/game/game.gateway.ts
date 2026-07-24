@@ -1,4 +1,5 @@
 import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import test from 'node:test';
 import { Server, Socket } from "socket.io"
 import { InfraType } from 'src/enums/infraType.enum';
 import type { Game } from 'src/interfaces/game.interface';
@@ -78,7 +79,10 @@ export class GameGateway {
     // const server=game.infrastructures.find((infra)=>infra.type===InfraType.Server);
     const selectedInfrastructure=game.infrastructures.find((infra)=>infra.type===data.infrastructure);
     if(!selectedInfrastructure) return;
-    setInterval(() => {
+    const attacker=game.players.find((p)=>p.role==="hacker");
+    if(!attacker) return;
+    attacker.energy-=3;
+    const interval=setInterval(() => {
      if(timeLeft>0){
       timeLeft--;
       // firewall.health=Math.max(0, firewall.health-2);
@@ -89,8 +93,37 @@ export class GameGateway {
         0
       );
       this.server.to(game.gameId).emit("gameDDosUpdate",game);
+     }else {
+        clearInterval(interval);
      }
     }, 1000);
     
+  }
+
+  @SubscribeMessage("RansomWareAction")
+  handleRansomWare(client:Socket,gameId:string){
+    const game=this.gameService.getGame(gameId);
+    const dataBase=game.infrastructures.find((i)=>i.type===InfraType.DataBase);
+    if(!dataBase) return;
+    dataBase.isBlocked=true;
+    const attacker=game.players.find((p)=>p.role==="hacker");
+    if(!attacker) return;
+    attacker.energy-=5;
+    game.systemHealth-=25;
+    this.server.to(game.gameId).emit("gameRansomWareUpdate",game);
+  }
+
+  @SubscribeMessage("SurchargeElectric")
+  handleSurcharge(client:Socket,gameId:string){
+    const game=this.gameService.getGame(gameId);
+    const energizer=game.infrastructures.find((i)=>i.type===InfraType.Energizer);
+    if(!energizer) return;
+    // energizer.isBlocked=true;
+    energizer.health=Math.max(0,energizer.health-((energizer.health*25)/100));
+    game.systemHealth = game.infrastructures.reduce(
+      (total, infra) => total + infra.health,
+      0
+    );
+    this.server.to(game.gameId).emit("gameSurchargeUpdate",game);
   }
 }

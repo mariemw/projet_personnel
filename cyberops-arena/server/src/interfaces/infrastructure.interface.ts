@@ -13,4 +13,6 @@ export interface Infrastructure{
     activeEffects?: Effect[];
 
     position?:string;
+
+    isBlocked?:boolean
 }
