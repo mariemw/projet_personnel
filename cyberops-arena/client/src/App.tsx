@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import WaitGameComponent from './components/wait-game.component';
 import GameComponent from './components/game.component';
 import GameStartedComponent from './components/game-started.component';
+import GameEndComponent from './components/game-end.component';
  
 function App() {
   useEffect(() => {
@@ -36,6 +37,7 @@ function App() {
             <Route path='/wait' element={ <WaitGameComponent/>}></Route>
             <Route path='/game/:gameId' element={ <GameComponent/>}></Route>
             <Route path='/game-started/:gameId' element={<GameStartedComponent/>}></Route>
+            <Route path='/game-end/:gameId' element={<GameEndComponent/>}></Route>
           </Routes>
          
       </div>

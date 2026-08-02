@@ -8,11 +8,13 @@ export interface Infrastructure{
 
     health: number;
 
-    status?: InfrastructureStatus;
+    // status?: InfrastructureStatus;
 
-    activeEffects?: Effect[];
+    // activeEffects?: Effect[];
 
-    position?:string;
+    // position?:string;
 
-    isBlocked?:boolean
+    isBlocked?:boolean,
+
+    ddosTimer?:number
 }

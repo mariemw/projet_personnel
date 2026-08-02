@@ -10,4 +10,5 @@ export interface Game{
     infrastructures:Infrastructure[];
     status?:Status,
     systemHealth:number,
+    isDDosActive?:boolean
 }

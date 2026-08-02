@@ -4,17 +4,21 @@ import "./game-started.component.css"
 import type { Infrastructure } from "../interfaces/infrastructures.interface";
 import { GameContext } from "../hooks/game-context";
 import type { player } from "../interfaces/player.interface";
+import { useNavigate } from "react-router-dom";
 
 export default function GameStartedComponent(){
    const {game}=useContext(GameContext);
    const [time,setTime]=useState(180);
    const [isDDos, setIsDDos] = useState(false);
+   const [ddosIsActive,setDdosIsActive]=useState(false);
    const [attacker,setAttacker]=useState<player>()
+   const [defender,setDefender]=useState<player>();
    const [infrastructures,setInfrastructures]=useState<Infrastructure[]>([]);
    const [selectedInfra, setSelectedInfra] = useState<Infrastructure | null>(null);
    const [showActionMenu, setShowActionMenu] = useState(false);
    const minutes = Math.floor(time / 60);
    const seconds = time % 60;
+   const navigate=useNavigate();
    const [systemHealth,setSystemHealth]=useState(100);
    const handleDDos=()=>{
       if((attacker?.energy ?? 0) >= 3){
@@ -43,18 +47,37 @@ export default function GameStartedComponent(){
       }
       
    }
+   const handleReparation=()=>{
+      if((defender?.energy??0)>=3){
+         setShowActionMenu(false)
+         socket.emit("reparation",{gameId:game.gameId,infra:selectedInfra?.type});
+      }
+   }
    
+   const handleDecryptage=()=>{
+      if((defender?.energy??0)>=6){
+         setShowActionMenu(false);
+         socket.emit("decryptage",game.gameId);
+      }
+   }
+
    useEffect(()=>{
+      
       console.log(attacker?.energy)
         socket.on("timerUpdate",(game)=>{
             setAttacker(game.players.find((p:player)=>p.role==="hacker"))
+            setDefender(game.players.find((p:player)=>p.role==="defender"))
             setTime(game.timer);
             setSystemHealth(game.systemHealth);
             setInfrastructures(game.infrastructures);
+            if(game.timer===0){
+               navigate(`/game-end/${game.gameId}`)
+            }
         }) 
         socket.on("gameDDosUpdate",(game)=>{
          setInfrastructures(game.infrastructures);
          setSystemHealth(game.systemHealth)
+         setDdosIsActive(game.isDDosActive);
          console.log("update infra")
         })
         socket.on("gameRansomWareUpdate",(game)=>{
@@ -67,11 +90,20 @@ export default function GameStartedComponent(){
          setInfrastructures(game.infrastructures);
          setSystemHealth(game.systemHealth)
         })
+        socket.on("reparationUpdate",(game)=>{
+         setInfrastructures(game.infrastructures);
+         setSystemHealth(game.systemHealth)
+        })
+
+        socket.on("decryptageUpdate",(game)=>{
+         setInfrastructures(game.infrastructures)
+         setSystemHealth(game.systemHealth)
+        })
         return () => {
             socket.off("timerUpdate");
             socket.off("gameDDosUpdate");
          };
-   },[])
+   },[navigate])
    return(
       <div className="mission-container">
 
@@ -143,43 +175,27 @@ export default function GameStartedComponent(){
                         <p>Choisissez une action</p>
                      </div>
 
-                     <button className="menu-btn repair"
-                        // onClick={() => {
-                        //    console.log("Réparer");
-                        //    // socket.emit(...)
-                        //    setShowActionMenu(false);
-                        // }}
+                     <button className="menu-btn repair" disabled={ddosIsActive}
+                        onClick={handleReparation}
                      >
                         🔧 Réparer
                      </button>
 
-                     <button className="menu-btn decrypt"
-                        // onClick={() => {
-                        //    console.log("Firewall");
-                        //    // socket.emit(...)
-                        //    setShowActionMenu(false);
-                        // }}
+                     <button className="menu-btn decrypt" disabled={selectedInfra.type!=="Base de données"}
+                        onClick={handleDecryptage}
                      >
                         Décryptage
                      </button>
 
                       <button className="menu-btn boost"
-                        // onClick={() => {
-                        //    console.log("Firewall");
-                        //    // socket.emit(...)
-                        //    setShowActionMenu(false);
-                        // }}
+                       
                      >
                         Multiplicateur
                      </button>
                      
 
                      <button className="menu-btn restart"
-                        // onClick={() => {
-                        //    console.log("Analyser");
-                        //    // socket.emit(...)
-                        //    setShowActionMenu(false);
-                        // }}
+                        disabled={!ddosIsActive || (selectedInfra.type==="Base de données" || selectedInfra.type==="Générateur d'énergie")}
                      >
                         Redémarrage Système
                      </button>

@@ -65,6 +65,23 @@ export class GameGateway {
           });
           game.timer=timeLeft;
           this.server.to(game?.gameId).emit("timerUpdate",game);
+          if(game.isDDosActive){
+            const selectedInfrastructure=game.infrastructures.find((infra)=>(infra.ddosTimer!)>0);
+            if(!selectedInfrastructure) return;
+            if(selectedInfrastructure.ddosTimer??0>0){
+              selectedInfrastructure.ddosTimer!--;
+              selectedInfrastructure.health=Math.max(0, selectedInfrastructure.health-2);
+              game.systemHealth = game.infrastructures.reduce(
+                (total, infra) => total + infra.health,
+                0
+              );
+              console.log(selectedInfrastructure.ddosTimer)
+              this.server.to(game.gameId).emit("gameDDosUpdate",game);
+            }else{
+              game.isDDosActive = false;
+              this.server.to(game.gameId).emit("gameDDosUpdate",game);
+            }
+          }
       }
     
     }, 1000);
@@ -74,29 +91,29 @@ export class GameGateway {
   @SubscribeMessage("DDosAction")
   handleDDos(client:Socket,data:{gameId:string,infrastructure:InfraType}){
     const game=this.gameService.getGame(data.gameId);
-    let timeLeft=10;
-    // const firewall=game.infrastructures.find((infra)=>infra.type===InfraType.FireWall);
-    // const server=game.infrastructures.find((infra)=>infra.type===InfraType.Server);
+    game.isDDosActive=true;
+    //let timeLeft=10;
     const selectedInfrastructure=game.infrastructures.find((infra)=>infra.type===data.infrastructure);
     if(!selectedInfrastructure) return;
+    selectedInfrastructure.ddosTimer=10;
     const attacker=game.players.find((p)=>p.role==="hacker");
     if(!attacker) return;
     attacker.energy-=3;
-    const interval=setInterval(() => {
-     if(timeLeft>0){
-      timeLeft--;
-      // firewall.health=Math.max(0, firewall.health-2);
-      // server.health=Math.max(0, server.health-2);
-      selectedInfrastructure.health=Math.max(0, selectedInfrastructure.health-2);
-      game.systemHealth = game.infrastructures.reduce(
-        (total, infra) => total + infra.health,
-        0
-      );
-      this.server.to(game.gameId).emit("gameDDosUpdate",game);
-     }else {
-        clearInterval(interval);
-     }
-    }, 1000);
+    // const interval=setInterval(() => {
+    //  if(timeLeft>0){
+    //   timeLeft--;
+    //   selectedInfrastructure.health=Math.max(0, selectedInfrastructure.health-2);
+    //   game.systemHealth = game.infrastructures.reduce(
+    //     (total, infra) => total + infra.health,
+    //     0
+    //   );
+    //   this.server.to(game.gameId).emit("gameDDosUpdate",game);
+    //  }else {
+    //     clearInterval(interval);
+    //     game.isDDosActive = false;
+    //     this.server.to(game.gameId).emit("gameDDosUpdate",game);
+    //  }
+    // }, 1000);
     
   }
 
@@ -125,5 +142,28 @@ export class GameGateway {
       0
     );
     this.server.to(game.gameId).emit("gameSurchargeUpdate",game);
+  }
+
+  @SubscribeMessage("reparation")
+  handleReparation(client:Socket,data:{gameId:string,infra:InfraType}){
+    const game=this.gameService.getGame(data.gameId);
+    const selectedInfrastructure=game.infrastructures.find((infra)=>infra.type===data.infra);
+    if(!selectedInfrastructure) return;
+    selectedInfrastructure.health=Math.min(25,selectedInfrastructure.health+(selectedInfrastructure?.health*20)/100)
+    game.systemHealth = game.infrastructures.reduce(
+      (total, infra) => total + infra.health,
+      0
+    );
+    this.server.to(game.gameId).emit("reparationUpdate",game);
+  }
+
+  @SubscribeMessage("decryptage")
+  handleDecryptage(client:Socket,gameId:string){
+    const game=this.gameService.getGame(gameId);
+    const dataBase=game.infrastructures.find((i)=>i.type===InfraType.DataBase);
+    if(!dataBase) return;
+    dataBase.isBlocked=false;
+    game.systemHealth+=25;
+    this.server.to(game.gameId).emit("decryptageUpdate",game);
   }
 }
